@@ -1,0 +1,5 @@
+{
+    "matrixUrl": "https://matrix.org",
+    "matrixToken": "TOKEN",
+    "matrixRoom": "ROOM-ID"
+}
