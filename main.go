@@ -10,21 +10,21 @@ import (
 )
 
 type RSS struct {
-    XMLName xml.Name `xml:"rss"`
-    Channel Channel  `xml:"channel"`
+	XMLName xml.Name `xml:"rss"`
+	Channel Channel  `xml:"channel"`
 }
 
 type Channel struct {
-    Title       string `xml:"title"`
-    Link        string `xml:"link"`
-    Description string `xml:"description"`
-    Items       []Item   `xml:"item"`
+	Title       string `xml:"title"`
+	Link        string `xml:"link"`
+	Description string `xml:"description"`
+	Items       []Item `xml:"item"`
 }
 
 type Item struct {
-    Title       string `xml:"title"`
-    Description string `xml:"description"`
-    PubDate     string `xml:"pubDate"`
+	Title       string `xml:"title"`
+	Description string `xml:"description"`
+	PubDate     string `xml:"pubDate"`
 }
 
 func main() {
@@ -33,21 +33,21 @@ func main() {
 		fmt.Println(err)
 	}
 
-    resp, err := http.Get("https://a858-nycnotify.nyc.gov/RSS/NotifyNYC?lang=en")
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
+	resp, err := http.Get("https://a858-nycnotify.nyc.gov/RSS/NotifyNYC?lang=en")
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
 
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        panic(err)
-    }
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
 
-    var rss RSS
-    if err := xml.Unmarshal(body, &rss); err != nil {
-        panic(err)
-    }
+	var rss RSS
+	if err := xml.Unmarshal(body, &rss); err != nil {
+		panic(err)
+	}
 	for _, item := range rss.Channel.Items {
 
 		file, err := os.ReadFile("log.txt")
@@ -55,7 +55,7 @@ func main() {
 			fmt.Println(err)
 		}
 		if strings.Contains(string(file), item.PubDate) {
-			break	
+			break
 
 		} else {
 			// Write the new entries to file
@@ -65,4 +65,3 @@ func main() {
 	}
 	f.Close()
 }
-
