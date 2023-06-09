@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type RSS struct {
@@ -28,40 +29,44 @@ type Item struct {
 }
 
 func main() {
-	f, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	resp, err := http.Get("https://a858-nycnotify.nyc.gov/RSS/NotifyNYC?lang=en")
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	var rss RSS
-	if err := xml.Unmarshal(body, &rss); err != nil {
-		panic(err)
-	}
-	for _, item := range rss.Channel.Items {
-
-		file, err := os.ReadFile("log.txt")
+	for {
+		f, err := os.OpenFile("/log/log.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			fmt.Println(err)
 		}
-		if strings.Contains(string(file), item.PubDate) {
-			break
 
-		} else {
-			// Write the new entries to file
-			f.WriteString(item.PubDate + "\n")
-			matrix(item.PubDate, item.Description, item.Title)
+		resp, err := http.Get("https://a858-nycnotify.nyc.gov/RSS/NotifyNYC?lang=en")
+		if err != nil {
+			panic(err)
 		}
+		defer resp.Body.Close()
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		var rss RSS
+		if err := xml.Unmarshal(body, &rss); err != nil {
+			panic(err)
+		}
+		for _, item := range rss.Channel.Items {
+
+			file, err := os.ReadFile("/log/log.txt")
+			if err != nil {
+				fmt.Println(err)
+			}
+			if strings.Contains(string(file), item.PubDate) {
+				break
+
+			} else {
+				// Write the new entries to file
+				f.WriteString(item.PubDate + "\n")
+				matrix(item.PubDate, item.Description, item.Title)
+			}
+		}
+		f.Close()
+		// Sleep for 5 minutes
+		time.Sleep(5 * time.Minute)
 	}
-	f.Close()
 }
