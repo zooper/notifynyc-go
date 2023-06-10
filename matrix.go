@@ -21,12 +21,12 @@ func matrix(pubDate string, Description string, Title string) {
 	}
 
 	// Need to join room to be able to send message, doh
-	_, err = client.JoinRoom(MatrixRoom, "", nil)
-	if err != nil {
-		fmt.Println("Error joining room ", err)
-		return
-
-	}
+	//	_, err = client.JoinRoom(MatrixRoom, "", nil)
+	//	if err != nil {
+	//		fmt.Println("Error joining room ", err)
+	//		return
+	//
+	//	}
 	// Send a message to a Matrix room
 	var message string
 	message = Title + "\n" + Description
