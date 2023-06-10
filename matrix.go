@@ -7,7 +7,7 @@ import (
 	"github.com/matrix-org/gomatrix"
 )
 
-func matrix(pubDate string, Description string, Title string) {
+func matrix(pubDate string, Title string, Description string) {
 
 	MatrixUrl := os.Getenv("matrixUrl")
 	MatrixRoom := os.Getenv("matrixRoom")

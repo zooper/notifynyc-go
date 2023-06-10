@@ -62,7 +62,9 @@ func main() {
 			} else {
 				// Write the new entries to file
 				f.WriteString(item.PubDate + "\n")
-				matrix(item.PubDate, item.Description, item.Title)
+				// Remove the translation junk in the end of the message
+				clean_Description := strings.Split(item.Description, "To view")[0]
+				matrix(item.PubDate, item.Title, clean_Description)
 			}
 		}
 		f.Close()
