@@ -37,13 +37,13 @@ func main() {
 
 		resp, err := http.Get("https://a858-nycnotify.nyc.gov/RSS/NotifyNYC?lang=en")
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
 		}
 		defer resp.Body.Close()
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
 		}
 
 		var rss RSS
