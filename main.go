@@ -64,7 +64,7 @@ func main() {
 				f.WriteString(item.PubDate + "\n")
 				// Remove the translation junk in the end of the message
 				clean_Description := strings.Split(item.Description, "To view")[0]
-				matrix(item.PubDate, item.Title, clean_Description)
+				telegram(item.PubDate, item.Title, clean_Description)
 			}
 		}
 		f.Close()
