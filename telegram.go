@@ -10,7 +10,7 @@ import (
 
 func telegram(pubDate string, Title string, Description string) {
 	botToken := os.Getenv("botToken")
-	channelID := os.Getenv("channgelID")
+	channelID := os.Getenv("channelID")
 
 	// Initialize the bot with your token.
 	bot, err := tgbotapi.NewBotAPI(botToken)
