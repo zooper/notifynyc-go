@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -48,23 +49,26 @@ func main() {
 
 		var rss RSS
 		if err := xml.Unmarshal(body, &rss); err != nil {
-			panic(err)
-		}
-		for _, item := range rss.Channel.Items {
+			fmt.Println("Cant parse rss: ")
+			log.Println(err)
 
-			file, err := os.ReadFile("/log/log.txt")
-			if err != nil {
-				fmt.Println(err)
-			}
-			if strings.Contains(string(file), item.PubDate) {
-				break
+		} else {
+			for _, item := range rss.Channel.Items {
 
-			} else {
-				// Write the new entries to file
-				f.WriteString(item.PubDate + "\n")
-				// Remove the translation junk in the end of the message
-				clean_Description := strings.Split(item.Description, "To view")[0]
-				telegram(item.PubDate, item.Title, clean_Description)
+				file, err := os.ReadFile("/log/log.txt")
+				if err != nil {
+					fmt.Println(err)
+				}
+				if strings.Contains(string(file), item.PubDate) {
+					break
+
+				} else {
+					// Write the new entries to file
+					f.WriteString(item.PubDate + "\n")
+					// Remove the translation junk in the end of the message
+					clean_Description := strings.Split(item.Description, "To view")[0]
+					telegram(item.PubDate, item.Title, clean_Description)
+				}
 			}
 		}
 		f.Close()
